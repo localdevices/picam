@@ -36,7 +36,7 @@ if [[ $onpi == "yes" ]]; then
     cat <<EOF > $HOME/timelapser.sh
 #!/bin/bash
 sleep 180
-rpicam-still --timeout 3000000 --timelapse 2000 -o timelapse/image_`date +"%Y-%m-%d_%H.%M.%S"`_%04d.jpg
+rpicam-still --timeout 3000000 --timelapse 2000 -o timelapse/image_\`date +"%Y-%m-%d_%H.%M.%S"\`_%04d.jpg
 EOF
 
     # make timelapser service
