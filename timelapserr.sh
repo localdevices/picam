@@ -30,28 +30,30 @@ if [[ $onpi == "yes" ]]; then
 
     # make timelapse directory
     mkdir -p $HOME/timelapse
-    mkdir -p $HOME/.config/systemd/user
+    mkdir -p $HOME/pi-timelapse
 
     # make timelapse shell script
-    cat <<EOF > $HOME/timelapser.sh
+    cat <<EOF > $HOME/pi-timelapse/timelapser.sh
 #!/bin/bash
 sleep 180
 rpicam-still --timeout 3000000 --timelapse 2000 -o timelapse/image_\`date +"%Y-%m-%d_%H.%M.%S"\`_%04d.jpg
 EOF
 
     # make timelapser service
-    cat <<EOF | sudo tee $HOME/.config/systemd/user/timelapser.service
+    cat <<EOF | sudo tee /etc/systemd/system/timelapser.service
 [Unit]
-Description=imx477 intervalometer setup
+Description=Start the Pi Timelapse script.
 After=network.target
 
 [Service]
-ExecStart=$HOME/timelapser.sh
-WorkingDirectory=$HOME
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
+Type=simple
+ExecStart=bash $HOMEpi-timelapse/timelapse.sh
+RemainAfterExit=true
+ExecStop=/usr/bin/pkill -f timelapse.sh
+StandardOutput=journal
+StandardError=journal
 User=$USER
+Group=$USER
 
 [Install]
 WantedBy=multi-user.target
@@ -60,6 +62,7 @@ EOF
     systemctl --user start timelapser.service
     systemctl --user enable timelapser.service
     
-    echo Configuration complete. Please reboot to start timelapse.
+    echo Configuration complete.
+    echo Please reboot to start timelapse.
 
 fi
