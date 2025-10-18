@@ -59,8 +59,9 @@ Group=$USER
 WantedBy=multi-user.target
 EOF
 
-    systemctl --user start timelapser.service
-    systemctl --user enable timelapser.service
+    sudo systemctl daemon-reload
+    sudo systemctl --user start timelapser.service
+    sudo systemctl --user enable timelapser.service
     
     echo Configuration complete.
     echo Please reboot to start timelapse.
