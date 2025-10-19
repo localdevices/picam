@@ -47,7 +47,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=bash $HOMEpi-timelapse/timelapse.sh
+ExecStart=bash $HOME/pi-timelapse/timelapse.sh
 RemainAfterExit=true
 ExecStop=/usr/bin/pkill -f timelapse.sh
 StandardOutput=journal
